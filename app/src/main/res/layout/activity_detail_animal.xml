@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".DetailAnimalActivity">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/sea_background"
+            android:scaleType="fitXY"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:weightSum="10">
+           <LinearLayout
+               android:layout_weight="8"
+               android:layout_width="match_parent"
+               android:layout_height="match_parent"
+               android:orientation="vertical">
+               <TextView
+                   android:id="@+id/txtAnimalName"
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content"
+                   android:gravity="center"
+                   android:text="ten con vat"
+                   android:textColor="#ffff"
+                   android:textStyle="bold"
+                   android:textSize="20dp"/>
+               <ImageView
+                   android:id="@+id/imgAnimalDetail"
+                   android:layout_width="match_parent"
+                   android:layout_height="match_parent"
+                   android:layout_marginHorizontal="15dp"
+                   android:layout_marginVertical="15dp"
+                   android:adjustViewBounds="false"
+                   android:cropToPadding="false"
+                   android:padding="10dp"
+                   android:background="@drawable/bordering"
+                   android:src="@drawable/sea1" />
+           </LinearLayout>
+            <LinearLayout
+                android:layout_weight="2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                >
+                <ImageView
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/back_icon"
+                    android:layout_weight="1"
+                    android:layout_marginHorizontal="18dp"/>
+                <ImageView
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/animal_speaker"
+                    android:layout_weight="1"
+                    android:layout_marginHorizontal="18dp"
+                    android:onClick="playAnimalSound"/>
+                <ImageView
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/human_speaker"
+                    android:layout_weight="1"
+                    android:layout_marginHorizontal="18dp"/>
+                <ImageView
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/forward_icon"
+                    android:layout_weight="1"
+                    android:layout_marginHorizontal="18dp"/>
+            </LinearLayout>
+        </LinearLayout>
+    </FrameLayout>
+
+</LinearLayout>
+
