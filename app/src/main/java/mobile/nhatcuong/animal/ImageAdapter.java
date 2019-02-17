@@ -13,12 +13,12 @@ public class ImageAdapter extends BaseAdapter {
 
     private Context context;
     private int layout;
-    private List<Image> images;
+    private List<Animal> animals;
 
-    public ImageAdapter(Context context, int layout, List<Image> images) {
+    public ImageAdapter(Context context, int layout, List<Animal> animals) {
         this.context = context;
         this.layout = layout;
-        this.images = images;
+        this.animals = animals;
     }
 
     public Context getContext() {
@@ -37,17 +37,17 @@ public class ImageAdapter extends BaseAdapter {
         this.layout = layout;
     }
 
-    public List<Image> getImages() {
-        return images;
+    public List<Animal> getAnimals() {
+        return animals;
     }
 
-    public void setImages(List<Image> images) {
-        this.images = images;
+    public void setAnimals(List<Animal> animals) {
+        this.animals = animals;
     }
 
     @Override
     public int getCount() {
-        return images.size();
+        return animals.size();
     }
 
     @Override
@@ -66,7 +66,6 @@ public class ImageAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-
         ViewHolder holder;
         if (convertView == null) {
             holder = new ViewHolder();
@@ -77,7 +76,7 @@ public class ImageAdapter extends BaseAdapter {
         }else{
             holder = (ViewHolder) convertView.getTag();
         }
-        Image image =  images.get(position);
+        Animal image =  animals.get(position);
         holder.image.setImageResource(image.getImage());
         return convertView;
     }

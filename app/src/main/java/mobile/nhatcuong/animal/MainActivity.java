@@ -1,9 +1,16 @@
 package mobile.nhatcuong.animal;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.webkit.WebView;
+import android.widget.ImageView;
+import android.widget.VideoView;
+
+import com.bumptech.glide.Glide;
+
 
 public class MainActivity extends AppCompatActivity {
     private static final int RQ_CODE = 111;
@@ -12,6 +19,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ImageView wv = findViewById(R.id.wv);
+//        Uri uri= Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.hand_click);
+//        Glide.with(getApplicationContext()).load(uri).into(wv);
     }
 
     private void goToAnimalsActivity(String title, int background){

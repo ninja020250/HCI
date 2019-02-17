@@ -14,7 +14,7 @@ import java.util.ArrayList;
 
 public class AnimalsActivity extends AppCompatActivity {
     GridView gvAnimals;
-    ArrayList<Image> animals;
+    ArrayList<Animal> animals;
     ImageAdapter adapter;
 
     @Override
@@ -34,8 +34,13 @@ public class AnimalsActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(AnimalsActivity.this, DetailAnimalActivity.class);
-                intent.putExtra("ANIMAL", animals.get(position));
+                Bundle bundle = new Bundle();
+                bundle.putInt("POSITION", position);
+//                intent.putExtra("POSITION", animals.get(position));
+                bundle.putSerializable("ANIMALS", animals);
+                intent.putExtras(bundle);
                 startActivity(intent);
+                // startActivityForResult(intent, 0);
             }
         });
     }
@@ -43,21 +48,20 @@ public class AnimalsActivity extends AppCompatActivity {
     private void mapping() {
         gvAnimals = findViewById(R.id.gvAnimals);
         animals = new ArrayList<>();
-        animals.add(new Image("hinh 1", R.drawable.sea1));
-        animals.add(new Image("hinh 2", R.drawable.sea2));
-        animals.add(new Image("hinh 3", R.drawable.sea3));
-        animals.add(new Image("hinh 4", R.drawable.sea4));
-        animals.add(new Image("hinh 5", R.drawable.sea5));
-        animals.add(new Image("hinh 6", R.drawable.sea6));
-        animals.add(new Image("hinh 7", R.drawable.sea7));
-        animals.add(new Image("hinh 8", R.drawable.sea8));
-        animals.add(new Image("hinh 9", R.drawable.sea9));
-        animals.add(new Image("hinh 10", R.drawable.sea10));
-        animals.add(new Image("hinh 11", R.drawable.sea6));
-        animals.add(new Image("hinh 12", R.drawable.sea7));
-        animals.add(new Image("hinh 13", R.drawable.sea8));
-        animals.add(new Image("hinh 14", R.drawable.sea9));
-        animals.add(new Image("hinh 15", R.drawable.sea10));
+        animals.add(new Animal("hinh 1", R.drawable.sea1));
+        animals.add(new Animal("hinh 2", R.drawable.sea2));
+        animals.add(new Animal("hinh 3", R.drawable.sea3));
+        animals.add(new Animal("hinh 4", R.drawable.sea4));
+        animals.add(new Animal("hinh 5", R.drawable.sea5));
+        animals.add(new Animal("hinh 6", R.drawable.sea6));
+        animals.add(new Animal("hinh 7", R.drawable.sea7));
+        animals.add(new Animal("hinh 8", R.drawable.sea8));
+        animals.add(new Animal("hinh 9", R.drawable.sea9));
+        animals.add(new Animal("hinh 10", R.drawable.sea10));
+        animals.add(new Animal("hinh 11", R.drawable.sea6));
+        animals.add(new Animal("hinh 12", R.drawable.sea7));
+        animals.add(new Animal("hinh 13", R.drawable.sea8));
+        animals.add(new Animal("hinh 14", R.drawable.sea9));
 
     }
 

@@ -24,7 +24,8 @@
                 android:value=".MainActivity" />
         </activity>
         <activity
-            android:name=".DetailAnimalActivity"></activity>
+            android:name=".DetailAnimalActivity">
+        </activity>
 
         <service
             android:name=".PlayMusicService"
