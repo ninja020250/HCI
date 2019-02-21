@@ -12,6 +12,8 @@ namespace API.Controllers
     public class GameController : ApiController
     {
         private readonly _Context _context = new _Context();
+
+        [HttpGet]
         public IHttpActionResult GetAll()
         {
             try

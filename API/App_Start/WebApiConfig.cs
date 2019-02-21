@@ -15,6 +15,12 @@ namespace API
             config.MapHttpAttributeRoutes();
 
             config.Routes.MapHttpRoute(
+                name: "animals",
+                routeTemplate: "api/animal",
+                defaults: new { controller = "Game" }
+            );
+
+            config.Routes.MapHttpRoute(
                 name: "DefaultApi",
                 routeTemplate: "api/{controller}/{id}",
                 defaults: new { id = RouteParameter.Optional }
