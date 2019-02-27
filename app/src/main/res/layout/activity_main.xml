@@ -1,42 +1,80 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity"
-    android:orientation="vertical">
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Animal App"
-        android:gravity="center"
-        android:textStyle="bold"/>
-
-    <Button
-        android:id="@+id/btnSky"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="animal in the sky"
-        android:onClick="ClickToPlaySkyAnimal"/>
-
-    <Button
-        android:id="@+id/btnEarth"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="animal in the EARTH"
-        android:onClick="ClickToPlayEarhAnimal"/>
-    <Button
-        android:id="@+id/btnSea"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="animal in the Sea"
-        android:onClick="ClickToPlaySeaAnimal"/>
+    android:orientation="vertical"
+    tools:context=".MainActivity">
 
     <ImageView
-        android:id="@+id/wv"
+        android:id="@+id/animalsbg"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:src="@drawable/home_bg" />
 
-</LinearLayout>
+    <pl.droidsonroids.gif.GifImageView
+        android:id="@+id/flying_bird"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:src="@drawable/flying_bird"
+        android:layout_gravity="right"
+        android:translationX="350dp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <fragment
+            android:id="@+id/custom_action_bar"
+            android:name="mobile.nhatcuong.animal.CustomActionbarFragment"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"></fragment>
+
+
+        <Button
+            android:id="@+id/btnSky"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="80dp"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/border_radius_button"
+            android:onClick="ClickToPlaySkyAnimal"
+            android:text="Động vật biết bay"
+            android:textColor="@color/colorWhite"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/btnEarth"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginVertical="20dp"
+            android:background="@drawable/border_radius_button"
+            android:onClick="ClickToPlayEarhAnimal"
+            android:text="Động vật trên cạn"
+            android:textColor="@color/colorWhite"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/btnSea"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginVertical="20dp"
+            android:background="@drawable/border_radius_button"
+            android:onClick="ClickToPlaySeaAnimal"
+            android:text="Động vật dưới nước "
+            android:textColor="@color/colorWhite"
+            android:textStyle="bold" />
+
+        <ImageView
+            android:id="@+id/wv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+</FrameLayout>

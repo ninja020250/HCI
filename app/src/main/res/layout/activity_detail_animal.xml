@@ -26,6 +26,11 @@
                android:layout_width="match_parent"
                android:layout_height="match_parent"
                android:orientation="vertical">
+               <fragment
+                   android:id="@+id/custom_action_bar"
+                   android:layout_width="match_parent"
+                   android:name="mobile.nhatcuong.animal.CustomActionbarFragment"
+                   android:layout_height="55dp"></fragment>
                <TextView
                    android:id="@+id/txtAnimalName"
                    android:layout_width="match_parent"
@@ -34,8 +39,9 @@
                    android:text="ten con vat"
                    android:textColor="#ffff"
                    android:textStyle="bold"
-                   android:textSize="20dp"/>
-               <ImageView
+                   android:textSize="40dp"/>
+               <pl.droidsonroids.gif.GifImageView
+                   android:layout_gravity="center"
                    android:id="@+id/imgAnimalDetail"
                    android:layout_width="match_parent"
                    android:layout_height="match_parent"
@@ -44,8 +50,8 @@
                    android:adjustViewBounds="false"
                    android:cropToPadding="false"
                    android:padding="10dp"
-                   android:background="@drawable/bordering"
-                   android:src="@drawable/sea1" />
+                   android:background="@drawable/bubble_background"
+                   android:src="@drawable/crab" />
            </LinearLayout>
             <LinearLayout
                 android:layout_weight="2"

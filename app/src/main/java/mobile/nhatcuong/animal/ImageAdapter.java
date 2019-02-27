@@ -9,6 +9,8 @@ import android.widget.ImageView;
 
 import java.util.List;
 
+import pl.droidsonroids.gif.GifImageView;
+
 public class ImageAdapter extends BaseAdapter {
 
     private Context context;
@@ -61,7 +63,7 @@ public class ImageAdapter extends BaseAdapter {
     }
 
     private class ViewHolder {
-        ImageView image;
+        GifImageView image;
     }
 
     @Override
@@ -78,6 +80,9 @@ public class ImageAdapter extends BaseAdapter {
         }
         Animal image =  animals.get(position);
         holder.image.setImageResource(image.getImage());
+        holder.image.setBackgroundResource(R.drawable.bubble_background);
+        holder.image.getLayoutParams().width = 50;
+        holder.image.getLayoutParams().height = 450;
         return convertView;
     }
 }

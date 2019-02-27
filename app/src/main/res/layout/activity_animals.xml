@@ -18,17 +18,89 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <GridView
-            android:id="@+id/gvAnimals"
+        <fragment
+            android:id="@+id/custom_action_bar"
+            android:name="mobile.nhatcuong.animal.CustomActionbarFragment"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"></fragment>
+
+
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:numColumns="2"
-            android:verticalSpacing="40dp"></GridView>
+            android:orientation="vertical">
+
+            <pl.droidsonroids.gif.GifImageView
+                android:id="@+id/ray"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:src="@drawable/ray"
+                android:layout_gravity="right"
+                android:alpha="0.8"
+                />
+            <pl.droidsonroids.gif.GifImageView
+                android:id="@+id/whale"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:src="@drawable/whale"
+                android:layout_gravity="left"
+                android:translationX="-150dp"
+                android:alpha="0.8"
+               />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <pl.droidsonroids.gif.GifImageView
+                    android:id="@+id/bubble"
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"
+                    android:layout_gravity="bottom"
+                    android:layout_weight="1"
+                    android:src="@drawable/bubble"
+                    android:translationY="90dp"/>
+
+                <pl.droidsonroids.gif.GifImageView
+                    android:id="@+id/bubble2"
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"
+                    android:layout_gravity="bottom"
+                    android:layout_weight="1"
+                    android:src="@drawable/bubble" />
+
+                <pl.droidsonroids.gif.GifImageView
+                    android:id="@+id/bubble3"
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"
+                    android:layout_gravity="bottom"
+                    android:layout_weight="1"
+                    android:src="@drawable/bubble"
+                    android:translationY="40dp"/>
+            </LinearLayout>
+
+            <GridView
+                android:id="@+id/gvAnimals"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:numColumns="2"
+                android:verticalSpacing="20dp"
+                android:paddingHorizontal="20dp"
+                android:horizontalSpacing="20dp"
+                android:paddingBottom="50dp"></GridView>
+        </FrameLayout>
     </LinearLayout>
-    <RelativeLayout
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:gravity="bottom">
-    </RelativeLayout>
+    <pl.droidsonroids.gif.GifImageView
+        android:id="@+id/btnGotoGame"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_gravity="bottom|right"
+        android:onClick="clickToPlayGame"
+        android:text="câu Đố"
+        android:layout_marginBottom="20dp"
+        android:layout_marginRight="20dp"
+        android:src="@drawable/btn_gogame">
+
+    </pl.droidsonroids.gif.GifImageView>
+
+
 
 </FrameLayout>
