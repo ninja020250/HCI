@@ -5,24 +5,21 @@ import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.IBinder;
 
+// this class handle play background music
 public class PlayMusicService extends Service {
     MediaPlayer mp_object;
     int music;
     public PlayMusicService() {
-
     }
-
     @Override
     public void onCreate() {
         super.onCreate();
     }
-
     @Override
     public IBinder onBind(Intent intent) {
         // TODO: Return the communication channel to the service.
         throw new UnsupportedOperationException("Not yet implemented");
     }
-
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         music = (int) intent.getExtras().get("music");
@@ -30,7 +27,6 @@ public class PlayMusicService extends Service {
         mp_object.start();
         return super.onStartCommand(intent, flags, startId);
     }
-
     @Override
     public void onDestroy() {
         mp_object.release();

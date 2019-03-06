@@ -7,20 +7,66 @@
     android:orientation="vertical"
     tools:context=".MainActivity">
 
-    <ImageView
+    <pl.droidsonroids.gif.GifImageView
         android:id="@+id/animalsbg"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="centerCrop"
-        android:src="@drawable/home_bg" />
-
+        android:src="@drawable/sea_background" />
     <pl.droidsonroids.gif.GifImageView
-        android:id="@+id/flying_bird"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:src="@drawable/flying_bird"
+        android:id="@+id/ray"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:src="@drawable/ray"
         android:layout_gravity="right"
-        android:translationX="350dp"/>
+
+        />
+    <pl.droidsonroids.gif.GifImageView
+        android:id="@+id/whale"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:src="@drawable/whale"
+        android:layout_gravity="left"
+        android:translationX="-150dp"
+
+        />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <pl.droidsonroids.gif.GifImageView
+            android:id="@+id/bubble"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_gravity="bottom"
+            android:layout_weight="1"
+            android:src="@drawable/bubble"
+            android:translationY="90dp"/>
+
+        <pl.droidsonroids.gif.GifImageView
+            android:id="@+id/bubble2"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_gravity="bottom"
+            android:layout_weight="1"
+            android:src="@drawable/bubble" />
+
+        <pl.droidsonroids.gif.GifImageView
+            android:id="@+id/bubble3"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_gravity="bottom"
+            android:layout_weight="1"
+            android:src="@drawable/bubble"
+            android:translationY="40dp"/>
+
+    </LinearLayout>
+    <pl.droidsonroids.gif.GifImageView
+        android:id="@+id/animated_turtle"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:src="@drawable/turtle"
+        android:layout_gravity="bottom|right"
+        android:translationX="200dp"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -34,47 +80,25 @@
             android:layout_height="55dp"></fragment>
 
 
-        <Button
-            android:id="@+id/btnSky"
-            android:layout_width="300dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="80dp"
-            android:layout_marginBottom="20dp"
-            android:background="@drawable/border_radius_button"
-            android:onClick="ClickToPlaySkyAnimal"
-            android:text="Động vật biết bay"
-            android:textColor="@color/colorWhite"
-            android:textStyle="bold" />
-
-        <Button
-            android:id="@+id/btnEarth"
-            android:layout_width="300dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginVertical="20dp"
-            android:background="@drawable/border_radius_button"
-            android:onClick="ClickToPlayEarhAnimal"
-            android:text="Động vật trên cạn"
-            android:textColor="@color/colorWhite"
-            android:textStyle="bold" />
-
-        <Button
-            android:id="@+id/btnSea"
-            android:layout_width="300dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginVertical="20dp"
-            android:background="@drawable/border_radius_button"
-            android:onClick="ClickToPlaySeaAnimal"
-            android:text="Động vật dưới nước "
-            android:textColor="@color/colorWhite"
-            android:textStyle="bold" />
-
-        <ImageView
-            android:id="@+id/wv"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="match_parent">
+            <Button
+                android:id="@+id/btnSea"
+                android:textSize="30dp"
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:layout_gravity="center_horizontal|center_vertical"
+                android:background="@drawable/blue_box"
+                android:onClick="clickToLearnAnimals"
+                android:text="BẮT ĐẦU"
+                android:textColor="@color/colorWhite"
+                android:textStyle="bold"
+                android:fontFamily="@font/coiny_regular"
+                android:layout_marginHorizontal="30dp"/>
+        </LinearLayout>
+
+
     </LinearLayout>
 
 </FrameLayout>

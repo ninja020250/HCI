@@ -1,6 +1,8 @@
 package mobile.nhatcuong.animal;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 
 public class Quiz {
     private String question;
@@ -11,6 +13,7 @@ public class Quiz {
         this.question = "Đố bé đây là con gì";
         Anwsers = anwsers;
         rightAnwsers = anwsers.get(0);
+
     }
 
     public boolean hanldeClick(String clickValue){
@@ -37,6 +40,7 @@ public class Quiz {
     }
 
     public ArrayList<Animal> getAnwsers() {
+        Collections.shuffle(this.Anwsers);
         return Anwsers;
     }
 

@@ -4,20 +4,19 @@ import java.io.Serializable;
 
 public class Animal implements Serializable {
     private String name;
-    private int overViewImage;
     private int Image;
-    private int animalVoice;
-    private int humanVoice;
+    private int animalVoice = 0;
+    private int humanVoice = 0;
 
-    public Animal(String name, int image) {
+    public Animal(String name, int image, int animalVoice) {
         this.name = name;
         Image = image;
+        this.animalVoice = animalVoice;
     }
 
-    public Animal(String name, int overViewImage, int image, int animalVoice, int humanVoice) {
+    public Animal(String name, int image, int animalVoice, int humanVoice) {
         this.name = name;
-        this.overViewImage = overViewImage;
-        Image = image;
+        this.Image = image;
         this.animalVoice = animalVoice;
         this.humanVoice = humanVoice;
     }
@@ -34,13 +33,6 @@ public class Animal implements Serializable {
         this.name = name;
     }
 
-    public int getOverViewImage() {
-        return overViewImage;
-    }
-
-    public void setOverViewImage(int overViewImage) {
-        this.overViewImage = overViewImage;
-    }
 
     public int getImage() {
         return Image;

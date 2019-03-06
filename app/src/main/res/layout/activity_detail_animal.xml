@@ -12,6 +12,7 @@
         android:layout_height="match_parent">
 
         <ImageView
+            android:id="@+id/detailAnimalBackground"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:src="@drawable/sea_background"
@@ -39,14 +40,16 @@
                    android:text="ten con vat"
                    android:textColor="#ffff"
                    android:textStyle="bold"
-                   android:textSize="40dp"/>
+                   android:textSize="40dp"
+                   android:fontFamily="@font/coiny_regular"
+                   />
                <pl.droidsonroids.gif.GifImageView
                    android:layout_gravity="center"
                    android:id="@+id/imgAnimalDetail"
                    android:layout_width="match_parent"
                    android:layout_height="match_parent"
                    android:layout_marginHorizontal="15dp"
-                   android:layout_marginVertical="15dp"
+                   android:layout_marginVertical="50dp"
                    android:adjustViewBounds="false"
                    android:cropToPadding="false"
                    android:padding="10dp"
@@ -57,8 +60,10 @@
                 android:layout_weight="2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="50dp"
                 >
                 <ImageView
+                    android:id="@+id/btnDetail1"
                     android:layout_width="120dp"
                     android:layout_height="wrap_content"
                     android:src="@drawable/back_icon"
@@ -66,6 +71,7 @@
                     android:layout_marginHorizontal="18dp"
                     android:onClick="clickToBackAnimal"/>
                 <ImageView
+                    android:id="@+id/btnDetail2"
                     android:layout_width="120dp"
                     android:layout_height="wrap_content"
                     android:src="@drawable/animal_speaker"
@@ -73,12 +79,15 @@
                     android:layout_marginHorizontal="18dp"
                     android:onClick="playAnimalSound"/>
                 <ImageView
+                    android:id="@+id/btnDetail3"
                     android:layout_width="120dp"
                     android:layout_height="wrap_content"
                     android:src="@drawable/human_speaker"
                     android:layout_weight="1"
-                    android:layout_marginHorizontal="18dp"/>
+                    android:layout_marginHorizontal="18dp"
+                    android:onClick="clickToHearAnimalName"/>
                 <ImageView
+                    android:id="@+id/btnDetail4"
                     android:layout_width="120dp"
                     android:layout_height="wrap_content"
                     android:src="@drawable/forward_icon"

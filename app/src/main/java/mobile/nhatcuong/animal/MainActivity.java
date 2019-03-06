@@ -3,17 +3,23 @@ package mobile.nhatcuong.animal;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.graphics.Point;
 import android.graphics.drawable.ColorDrawable;
+import android.media.MediaPlayer;
 import android.net.Uri;
+import android.os.Handler;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Display;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.view.animation.TranslateAnimation;
 import android.webkit.WebView;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -32,19 +38,46 @@ import com.google.gson.Gson;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import pl.droidsonroids.gif.GifImageView;
 
 
 public class MainActivity extends AppCompatActivity {
-    private static final int RQ_CODE = 111;
+    private static final int RQ_CODE = 111; // request code
+    // =====================================actionbar custome =====================================
     private ImageView backbutton;
     TextView actionbar_title;
+    private Button btnSea;
+    //    ==================================================================
     private ArrayList<Animal> animals = null;
-    private GifImageView flyingBird;
-    float birdX;
-    float birdY;
-    Intent music =null;
+    Intent music = null;
+    // ===================================animated =================================
+    private GifImageView bubble1;
+    private GifImageView bubble2;
+    private GifImageView bubble3;
+    private int screenWidth;
+    private int screenHeight;
+    private Timer timer = new Timer();
+    private float bubble1_X;
+    private float bubble1_Y;
+    private float bubble2_X;
+    private float bubble2_Y;
+    private float bubble3_X;
+    private float bubble3_Y;
+    private Handler handler = new Handler();
+    private GifImageView ray;
+    private GifImageView whale;
+    private  GifImageView turtle;
+    private float ray_x;
+    private float ray_y;
+    private float whale_x;
+    private float whale_y;
+    private float turtle_x;
+    private float turtle_y;
+//    ===================================================
+    MediaPlayer mediaBackground;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,36 +85,115 @@ public class MainActivity extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_main);
         mapping();
-        playBackgroundMusic();
         eventMapping();
         getData();
-        setAnimation();
         playBackgroundMusic();
-    }
-    private void setAnimation(){
-        TranslateAnimation translateAnimationX =  new TranslateAnimation(0f, -2000f,0f,0f);
-        translateAnimationX.setDuration(5000);
-        translateAnimationX.setRepeatCount(Animation.INFINITE);
-        flyingBird.setAnimation(translateAnimationX) ;
+        setSeaAnimation();
     }
     private void mapping() {
+        btnSea =  findViewById(R.id.btnSea);
 
+        bubble1 = findViewById(R.id.bubble);
+        bubble2 = findViewById(R.id.bubble2);
+        bubble3 = findViewById(R.id.bubble3);
+        turtle = findViewById(R.id.animated_turtle);
+        ray = findViewById(R.id.ray);
+        whale = findViewById(R.id.whale);
         backbutton = findViewById(R.id.actionbar_back);
         actionbar_title = findViewById(R.id.actionbar_title);
         actionbar_title.setText("BÉ HỌC CON VẬT");
-        flyingBird =  findViewById(R.id.flying_bird);
+    }
+    private void setSeaAnimation() {
+        Animation zoom = AnimationUtils.loadAnimation(this, R.anim.zoom);
+        bubble1.setAnimation(zoom);
+        bubble3.setAnimation(zoom);
 
-        //        Uri uri= Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.hand_click);
-////        Glide.with(getApplicationContext()).load(uri).into(wv);
+        btnSea.setAnimation(zoom);
+        WindowManager wm = getWindowManager();
+        Display dp = wm.getDefaultDisplay();
+        Point size = new Point();
+        dp.getSize(size);
+        screenWidth = size.x;
+        screenHeight = size.y;
+//        bubble1.setX(-80.0f);
+        bubble1.setY(200f);
+//        bubble2.setX(0f);
+        bubble2.setY(-200.0f);
+//        bubble3.setX(-80.0f);
+        bubble3.setY(200f);
 
+     //   whale.setX(-300f);
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        changePostBubble();
+                        changeFishPosition();
+                    }
+                });
+            }
+        }, 0, 20);
 
-
+        // resizeButton();
+    }
+    private void changeFishPosition() {
+        // change position of whale and ray.
+        ray_x -= 10;
+        if (ray.getX() + ray.getWidth() < 0) {
+            ray_y = (float) Math.floor(Math.random() * (screenHeight - ray.getHeight()));
+            ray_x = screenWidth + 100.0f;
+        }
+        ray.setX(ray_x);
+        ray.setY(ray_y);
+        whale_x += 10;
+        if (whale.getX() > screenWidth) {
+            whale_y = (float) Math.floor(Math.random() * (screenHeight - whale.getHeight()));
+            whale_x = -500.0f;
+        }
+        whale.setX(whale_x);
+        whale.setY(whale_y);
+//        ============================================
+        turtle_x -= 10;
+        if (turtle.getX() + turtle.getWidth() < 0) {
+            turtle_y = (float) Math.floor(Math.random() * (screenHeight - turtle.getHeight()));
+            turtle_x = screenWidth + 100.0f;
+        }
+        turtle.setX(turtle_x);
+        turtle.setY(turtle_y);
+    }
+    public void changePostBubble() {
+        bubble1_Y -= 10;
+        if (bubble1.getY() + bubble1.getHeight() < 0) {
+            bubble1_X = (float) Math.floor(Math.random() * (screenWidth - bubble1.getWidth()));
+            bubble1_Y = screenHeight + 200.0f;
+        }
+        bubble1.setX(bubble1_X);
+        bubble1.setY(bubble1_Y);
+        bubble2_Y -= 10;
+        if (bubble2.getY() + bubble2.getHeight() < 0) {
+            bubble2_X = (float) Math.floor(Math.random() * (screenWidth - bubble2.getWidth()));
+            bubble2_Y = screenHeight + 0.0f;
+        }
+        bubble2.setX(bubble2_X);
+        bubble2.setY(bubble2_Y);
+        bubble3_Y -= 10;
+        if (bubble3.getY() + bubble3.getHeight() < 0) {
+            bubble3_X = (float) Math.floor(Math.random() * (screenWidth - bubble3.getWidth()));
+            bubble3_Y = screenHeight + 200.0f;
+        }
+        bubble3.setX(bubble3_X);
+        bubble3.setY(bubble3_Y);
     }
 
-    private void playBackgroundMusic(){
-         music = new Intent(this, PlayMusicService.class);
-        music.putExtra("music", R.raw.undersea);
-            startService(music);
+
+    private void playBackgroundMusic() {
+//        music = new Intent(this, PlayMusicService.class);
+//        music.putExtra("music", R.raw.henes_bgmusic);
+        mediaBackground =  MediaPlayer.create(MainActivity.this,R.raw.henes_bgmusic);
+        mediaBackground.start();
+//        startService(music);
     }
 
     private void eventMapping() {
@@ -91,11 +203,10 @@ public class MainActivity extends AppCompatActivity {
                 finish();
             }
         });
-
     }
 
     private void saveDataToPreference(ArrayList<Animal> animals) {
-        // SharedPreferences sharedPreferences = getSharedPreferences("mobile.nhatcuong.database_preference", MODE_PRIVATE);
+        //save data to database (I use preferences)
         try {
             SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("mobile.nhatcuong.database_preferences", 0);
             SharedPreferences.Editor edt = sharedPreferences.edit();
@@ -110,22 +221,23 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private ArrayList<Animal> fakeData() {
+        //  get sample data
         ArrayList a = new ArrayList<Animal>();
-        a.add(new Animal("Con Cua", R.drawable.crab));
-        a.add(new Animal("Voi Xanh", R.drawable.blue_whale));
-        a.add(new Animal("Con Sò", R.drawable.clam));
-        a.add(new Animal("Cá Đuối", R.drawable.gray_fish));
-        a.add(new Animal("Con Sứa", R.drawable.jellyfish));
-        a.add(new Animal("Con Bạch Tuộc", R.drawable.octopus));
-        a.add(new Animal("Cá Ngựa", R.drawable.seahorse));
-        a.add(new Animal("Cá Heo", R.drawable.dolphin));
-        a.add(new Animal("Cá Mập", R.drawable.shark));
-        a.add(new Animal("Con rùa", R.drawable.turtle));
+        a.add(new Animal("Con Cua", R.drawable.crab,0, R.raw.crab_voice));
+        a.add(new Animal("Cá Voi Xanh", R.drawable.blue_whale, 0, R.raw.whale_sound));
+        a.add(new Animal("Ngọc Trai", R.drawable.clam, 0, R.raw.clam_voice));
+        a.add(new Animal("Cá Đuối", R.drawable.gray_fish,0, R.raw.stringray_sound));
+        a.add(new Animal("Con Sứa", R.drawable.jellyfish, 0, R.raw.jellyfish_sound));
+        a.add(new Animal("Bạch Tuộc", R.drawable.octopus, 0, R.raw.octopus_sound));
+        a.add(new Animal("Cá Ngựa", R.drawable.seahorse, 0, R.raw.horse_fish_sound));
+        a.add(new Animal("Cá Heo", R.drawable.dolphin, R.raw.dolphin, R.raw.dolphin_sound));
+        a.add(new Animal("Cá Mập", R.drawable.shark, 0, R.raw.shark_sound));
+        a.add(new Animal("Con Rùa", R.drawable.turtle, 0, R.raw.turtle_sound));
         return a;
-
     }
 
     private void getData() {
+        // get data from server
         String url = "https://virtserver.swaggerhub.com/ninja020250/Apartment/2/user";
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         JsonObjectRequest objectRequest = new JsonObjectRequest(
@@ -148,47 +260,27 @@ public class MainActivity extends AppCompatActivity {
         requestQueue.add(objectRequest);
     }
 
-    private void goToAnimalsActivity(String title, int background, int color, String type) {
-        Intent intent = new Intent(this, AnimalsActivity.class);
-        Bundle bundle = new Bundle();
-        bundle.putString("title", title);
-        bundle.putInt("background", background);
-        bundle.putInt("actionbarColor", color);
-        bundle.putString("type", type );
-        intent.putExtras(bundle);
-        startActivity(intent);
-    }
-
-    public void ClickToPlaySkyAnimal(View view) {
-        int colorGreen = R.color.colorGreen;
-        goToAnimalsActivity("Động vật biết bay", R.drawable.forest_background, colorGreen, "sky");
-    }
-
-    public void ClickToPlayEarhAnimal(View view) {
-        int colorGreen = R.color.colorGreen;
-        goToAnimalsActivity("Động vật trên cạn", R.drawable.forest_background, colorGreen, "earth");
-    }
-
-    public void ClickToPlaySeaAnimal(View view) {
-        int colorBlue = R.color.colorBlue;
-        goToAnimalsActivity("Động vật dưới nước", R.drawable.sea_background, colorBlue, "sea");
-    }
-
     @Override
     protected void onPause() {
+        mediaBackground.pause();
         super.onPause();
-        stopService(music);
-    }
 
+    }
+    //
     @Override
     protected void onResume() {
+//        mediaBackground =  MediaPlayer.create(QuizActivity.this,R.raw.henes_bgmusic);
+        mediaBackground.start();
         super.onResume();
-        startService(music);
     }
 
     @Override
-    protected void onStop() {
-        super.onStop();
-        stopService(music);
+    protected void onDestroy() {
+        mediaBackground.release();
+        super.onDestroy();
+    }
+    public void clickToLearnAnimals(View view) {
+        Intent intent = new Intent(MainActivity.this, AnimalsActivity.class);
+        startActivity(intent);
     }
 }

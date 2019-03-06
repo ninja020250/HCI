@@ -3,17 +3,13 @@ package mobile.nhatcuong.animal;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-
+// this class handle swipe Event in animals activity
 public class SwipeDetector implements View.OnTouchListener{
 
     private int min_distance = 100;
     private float downX, downY, upX, upY;
     private View v;
-
     private onSwipeEvent swipeEventListener;
-
-
-
     public SwipeDetector(View v){
         this.v=v;
         v.setOnTouchListener(this);

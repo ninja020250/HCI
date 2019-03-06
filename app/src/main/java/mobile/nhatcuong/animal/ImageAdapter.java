@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import pl.droidsonroids.gif.GifImageView;
@@ -15,12 +16,18 @@ public class ImageAdapter extends BaseAdapter {
 
     private Context context;
     private int layout;
-    private List<Animal> animals;
-
-    public ImageAdapter(Context context, int layout, List<Animal> animals) {
+    private List<Animal> animals ;
+    private int intScreenWidth ;
+    public ImageAdapter(Context context, int layout, List<Animal> animals, int intScreenWidth) {
         this.context = context;
         this.layout = layout;
-        this.animals = animals;
+        if(animals == null){
+            animals=  new ArrayList<>();
+        }else{
+            this.animals = animals;
+        }
+
+        this.intScreenWidth =  intScreenWidth;
     }
 
     public Context getContext() {
@@ -66,6 +73,14 @@ public class ImageAdapter extends BaseAdapter {
         GifImageView image;
     }
 
+    public int getIntScreenWidth() {
+        return intScreenWidth;
+    }
+
+    public void setIntScreenWidth(int intScreenWidth) {
+        this.intScreenWidth = intScreenWidth;
+    }
+
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder;
@@ -81,8 +96,8 @@ public class ImageAdapter extends BaseAdapter {
         Animal image =  animals.get(position);
         holder.image.setImageResource(image.getImage());
         holder.image.setBackgroundResource(R.drawable.bubble_background);
-        holder.image.getLayoutParams().width = 50;
-        holder.image.getLayoutParams().height = 450;
+        holder.image.getLayoutParams().width = 100;
+        holder.image.getLayoutParams().height = (intScreenWidth - 180)/2;
         return convertView;
     }
 }
