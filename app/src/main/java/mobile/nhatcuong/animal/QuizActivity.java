@@ -49,6 +49,7 @@ public class QuizActivity extends AppCompatActivity {
     Quiz quiz;
     private GifImageView imgCurrentAnimal;
     private MediaPlayer mediaBackground;
+    private MediaPlayer question_media;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,6 +72,8 @@ public class QuizActivity extends AppCompatActivity {
         setupGame();
         HandleClickAnswer();
         reSizeImg();
+        question_media = MediaPlayer.create(QuizActivity.this, R.raw.question);
+        question_media.start();
     }
     private void playBackgroundMusic() {
 //        music = new Intent(this, PlayMusicService.class);
@@ -124,6 +127,8 @@ public class QuizActivity extends AppCompatActivity {
         ArrayList<Animal> list = getRandomAnimal();
         quiz = new Quiz(list);
         imgCurrentAnimal.setImageResource(list.get(0).getImage());
+
+
         ArrayList<Animal> a = quiz.getAnwsers();
         btnAnswer1.setText(a.get(0).getName());
         btnAnswer2.setText(a.get(1).getName());
@@ -153,10 +158,13 @@ public class QuizActivity extends AppCompatActivity {
                     public void run() {
                         gifSuccess.setVisibility(View.INVISIBLE);
                         mediaPlayer.stop();
+                        question_media = MediaPlayer.create(QuizActivity.this, R.raw.question);
+                        question_media.start();
                     }
                 });
             }
         }, 2000);
+
         setupGame();
     }
 

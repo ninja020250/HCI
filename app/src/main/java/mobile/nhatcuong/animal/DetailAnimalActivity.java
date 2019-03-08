@@ -44,13 +44,13 @@ public class DetailAnimalActivity extends AppCompatActivity {
     ImageView backbutton;
     ImageView homeButton;
     private MediaPlayer mediaBackground;
-
+    private MediaPlayer question_media;
     //group 4button
-
     ImageView btn1;
     ImageView btn2;
     ImageView btn3;
     ImageView btn4;
+
     // ===============================================
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,9 +80,11 @@ public class DetailAnimalActivity extends AppCompatActivity {
         animals = (ArrayList<Animal>) bundle.getSerializable("ANIMALS");
         position = bundle.getInt("POSITION");
         currentAnimal = animals.get(position);
-        if(currentAnimal.getAnimalVoice() == 0){
+        question_media = MediaPlayer.create(DetailAnimalActivity.this, currentAnimal.getHumanVoice());
+        question_media.start();
+        if (currentAnimal.getAnimalVoice() == 0) {
             btn2.setImageResource(R.drawable.voice_disable);
-        }else{
+        } else {
             btn2.setImageResource(R.drawable.animal_speaker);
         }
         txtAnimalName.setText(currentAnimal.getName());
@@ -117,10 +119,10 @@ public class DetailAnimalActivity extends AppCompatActivity {
 
     private void setAnimation() {
         Animation zoom = AnimationUtils.loadAnimation(this, R.anim.zoom);
-         btn1 = findViewById(R.id.btnDetail1);
-         btn2 = findViewById(R.id.btnDetail2);
-         btn3 = findViewById(R.id.btnDetail3);
-         btn4 = findViewById(R.id.btnDetail4);
+        btn1 = findViewById(R.id.btnDetail1);
+        btn2 = findViewById(R.id.btnDetail2);
+        btn3 = findViewById(R.id.btnDetail3);
+        btn4 = findViewById(R.id.btnDetail4);
         btn1.setAnimation(zoom);
         btn2.setAnimation(zoom);
         btn3.setAnimation(zoom);
@@ -145,7 +147,7 @@ public class DetailAnimalActivity extends AppCompatActivity {
     }
 
     public void playAnimalSound(View view) {
-        if(currentAnimal.getAnimalVoice() != 0){
+        if (currentAnimal.getAnimalVoice() != 0) {
             mediaPlayer = MediaPlayer.create(DetailAnimalActivity.this, currentAnimal.getAnimalVoice());
             mediaPlayer.start();
         }
@@ -160,9 +162,9 @@ public class DetailAnimalActivity extends AppCompatActivity {
         }
 
         currentAnimal = animals.get(position);
-        if(currentAnimal.getAnimalVoice() == 0){
+        if (currentAnimal.getAnimalVoice() == 0) {
             btn2.setImageResource(R.drawable.voice_disable);
-        }else{
+        } else {
             btn2.setImageResource(R.drawable.animal_speaker);
         }
         txtAnimalName.setText(currentAnimal.getName());
@@ -179,9 +181,9 @@ public class DetailAnimalActivity extends AppCompatActivity {
             position = animals.size() - 1;
         }
         currentAnimal = animals.get(position);
-        if(currentAnimal.getAnimalVoice() == 0){
+        if (currentAnimal.getAnimalVoice() == 0) {
             btn2.setImageResource(R.drawable.voice_disable);
-        }else{
+        } else {
             btn2.setImageResource(R.drawable.animal_speaker);
         }
         txtAnimalName.setText(currentAnimal.getName());
@@ -253,9 +255,9 @@ public class DetailAnimalActivity extends AppCompatActivity {
     }
 
     public void clickToHearAnimalName(View view) {
-       if(currentAnimal.getHumanVoice() != 0){
-           mediaPlayer = MediaPlayer.create(DetailAnimalActivity.this, currentAnimal.getHumanVoice());
-           mediaPlayer.start();
-       }
+        if (currentAnimal.getHumanVoice() != 0) {
+            mediaPlayer = MediaPlayer.create(DetailAnimalActivity.this, currentAnimal.getHumanVoice());
+            mediaPlayer.start();
+        }
     }
 }
