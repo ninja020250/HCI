@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.media.MediaPlayer;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Display;
@@ -24,6 +25,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import pl.droidsonroids.gif.GifImageView;
 
@@ -45,6 +48,8 @@ public class DetailAnimalActivity extends AppCompatActivity {
     ImageView homeButton;
     private MediaPlayer mediaBackground;
     private MediaPlayer question_media;
+    private Handler h;
+    private Runnable stopPlaybackRun;
     //group 4button
     ImageView btn1;
     ImageView btn2;
@@ -61,12 +66,24 @@ public class DetailAnimalActivity extends AppCompatActivity {
         // ======================================
         mapping();
         setAnimation();
-        playBackgroundMusic();
+//        playBackgroundMusic();
+//        mediaBackground.stop();
+        mediaBackground = MediaPlayer.create(DetailAnimalActivity.this, R.raw.henes_bgmusic);
+        mediaBackground.start();
+        mediaBackground.setVolume(0.0f, 0.0f);
+        h = new Handler();
+        stopPlaybackRun = new Runnable() {
+            public void run() {
+                mediaBackground.setVolume(1.0f, 1.0f);
+            }
+        };
+        h.postDelayed(stopPlaybackRun, 3000);
         setupCurrentAnimal();
         setupActionbar();
         eventMapping();
 
     }
+
 
     private void setupCurrentAnimal() {
         WindowManager wm = getWindowManager();
@@ -141,15 +158,16 @@ public class DetailAnimalActivity extends AppCompatActivity {
     private void playBackgroundMusic() {
 //        music = new Intent(this, PlayMusicService.class);
 //        music.putExtra("music", R.raw.undersea);
-        mediaBackground = MediaPlayer.create(DetailAnimalActivity.this, R.raw.henes_bgmusic);
-        mediaBackground.start();
+//        mediaBackground = MediaPlayer.create(DetailAnimalActivity.this, R.raw.henes_bgmusic);
+//       mediaBackground.start();
 
     }
 
     public void playAnimalSound(View view) {
         if (currentAnimal.getAnimalVoice() != 0) {
-            mediaPlayer = MediaPlayer.create(DetailAnimalActivity.this, currentAnimal.getAnimalVoice());
-            mediaPlayer.start();
+
+           mediaPlayer = MediaPlayer.create(DetailAnimalActivity.this, currentAnimal.getAnimalVoice());
+           mediaPlayer.start();
         }
 
 
@@ -169,6 +187,12 @@ public class DetailAnimalActivity extends AppCompatActivity {
         }
         txtAnimalName.setText(currentAnimal.getName());
         imgAnimalDetail.setImageResource(currentAnimal.getImage());
+        if (currentAnimal.getHumanVoice() != 0) {
+            mediaBackground.setVolume(0.3f, 0.3f);
+            h.postDelayed(stopPlaybackRun, 3000);
+            mediaPlayer = MediaPlayer.create(DetailAnimalActivity.this, currentAnimal.getHumanVoice());
+            mediaPlayer.start();
+        }
     }
 
     public void clickToNextAnimal(View view) {
@@ -188,6 +212,12 @@ public class DetailAnimalActivity extends AppCompatActivity {
         }
         txtAnimalName.setText(currentAnimal.getName());
         imgAnimalDetail.setImageResource(currentAnimal.getImage());
+        if (currentAnimal.getHumanVoice() != 0) {
+            mediaBackground.setVolume(0.3f, 0.3f);
+            h.postDelayed(stopPlaybackRun, 3000);
+            mediaPlayer = MediaPlayer.create(DetailAnimalActivity.this, currentAnimal.getHumanVoice());
+            mediaPlayer.start();
+        }
     }
 
     public void clickToBackAnimal(View view) {
@@ -256,6 +286,8 @@ public class DetailAnimalActivity extends AppCompatActivity {
 
     public void clickToHearAnimalName(View view) {
         if (currentAnimal.getHumanVoice() != 0) {
+            mediaBackground.setVolume(0.3f, 0.3f);
+            h.postDelayed(stopPlaybackRun, 3000);
             mediaPlayer = MediaPlayer.create(DetailAnimalActivity.this, currentAnimal.getHumanVoice());
             mediaPlayer.start();
         }

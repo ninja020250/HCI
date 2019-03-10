@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Point;
 import android.media.MediaPlayer;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -50,6 +51,8 @@ public class QuizActivity extends AppCompatActivity {
     private GifImageView imgCurrentAnimal;
     private MediaPlayer mediaBackground;
     private MediaPlayer question_media;
+    private Handler h;
+    private Runnable stopPlaybackRun;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,7 +60,6 @@ public class QuizActivity extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_quiz);
         mapping();
-
         //setup action bar custom
         Bundle bundle = getIntent().getExtras();
         bg.setImageResource(R.drawable.sea_background);
@@ -68,6 +70,14 @@ public class QuizActivity extends AppCompatActivity {
         mappingEvent();
         setAnimated();
         playBackgroundMusic();
+        mediaBackground.setVolume(0.0f, 0.0f);
+        h = new Handler();
+        stopPlaybackRun = new Runnable() {
+            public void run() {
+                mediaBackground.setVolume(1.0f, 1.0f);
+            }
+        };
+        h.postDelayed(stopPlaybackRun, 2500);
         getDataFromDatabase();
         setupGame();
         HandleClickAnswer();
@@ -158,6 +168,8 @@ public class QuizActivity extends AppCompatActivity {
                     public void run() {
                         gifSuccess.setVisibility(View.INVISIBLE);
                         mediaPlayer.stop();
+                        mediaBackground.setVolume(0.0f, 0.0f);
+                        h.postDelayed(stopPlaybackRun, 2500);
                         question_media = MediaPlayer.create(QuizActivity.this, R.raw.question);
                         question_media.start();
                     }
