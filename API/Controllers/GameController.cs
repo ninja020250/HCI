@@ -14,6 +14,7 @@ namespace API.Controllers
         private readonly _Context _context = new _Context();
 
         [HttpGet]
+        [Route("animal")]
         public IHttpActionResult GetAll()
         {
             try
@@ -26,6 +27,7 @@ namespace API.Controllers
             }
         }
         [HttpPost]
+        [Route("animal")]
         public IHttpActionResult Create(AnimalVM vm)
         {
             try
@@ -36,7 +38,6 @@ namespace API.Controllers
                     {
                         _context.Animals.Add(new Animal
                         {
-                            ImageUrl = vm.ImageUrl,
                             Name = vm.Name,
                             AnimationUrl = vm.AnimationUrl,
                             Type = vm.Type
@@ -58,7 +59,6 @@ namespace API.Controllers
     public class AnimalVM
     {
         public string Name { get; set; }
-        public string ImageUrl { get; set; }
         public string AnimationUrl { get; set; }
         public string Type { get; set; }
     }
