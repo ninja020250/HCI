@@ -3,10 +3,30 @@ package mobile.nhatcuong.animal;
 import java.io.Serializable;
 
 public class Animal implements Serializable {
+    private String id;
     private String name;
     private int Image;
     private int animalVoice = 0;
     private int humanVoice = 0;
+    private String animalVoiceURL= "";
+    private String humanVoiceURL = "";
+    private String imageURL = "";
+
+    public Animal(String id, String name, String animalVoiceURL, String humanVoiceURL, String imageURL) {
+        this.id = id;
+        this.name = name;
+        this.animalVoiceURL = animalVoiceURL;
+        this.humanVoiceURL = humanVoiceURL;
+        this.imageURL = imageURL;
+    }
+
+    public Animal(String id, String name, int animalVoice, int humanVoice, String imageURL) {
+        this.id = id;
+        this.name = name;
+        this.animalVoice = animalVoice;
+        this.humanVoice = humanVoice;
+        this.imageURL = imageURL;
+    }
 
     public Animal(String name, int image, int animalVoice) {
         this.name = name;
@@ -56,5 +76,37 @@ public class Animal implements Serializable {
 
     public void setHumanVoice(int humanVoice) {
         this.humanVoice = humanVoice;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getAnimalVoiceURL() {
+        return animalVoiceURL;
+    }
+
+    public void setAnimalVoiceURL(String animalVoiceURL) {
+        this.animalVoiceURL = animalVoiceURL;
+    }
+
+    public String getHumanVoiceURL() {
+        return humanVoiceURL;
+    }
+
+    public void setHumanVoiceURL(String humanVoiceURL) {
+        this.humanVoiceURL = humanVoiceURL;
+    }
+
+    public String getImageURL() {
+        return imageURL;
+    }
+
+    public void setImageURL(String imageURL) {
+        this.imageURL = imageURL;
     }
 }

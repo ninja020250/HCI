@@ -26,6 +26,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Timer;
@@ -73,11 +75,16 @@ public class DetailAnimalActivity extends AppCompatActivity {
 //        mediaBackground.stop();
         mediaBackground = MediaPlayer.create(DetailAnimalActivity.this, R.raw.henes_bgmusic);
         mediaBackground.start();
-        mediaBackground.setVolume(0.0f, 0.0f);
+
+        if(mediaBackground != null ){
+            mediaBackground.setVolume(0.0f, 0.0f);
+        }
         h = new Handler();
         stopPlaybackRun = new Runnable() {
             public void run() {
-                mediaBackground.setVolume(1.0f, 1.0f);
+               if(mediaBackground != null ){
+                   mediaBackground.setVolume(1.0f, 1.0f);
+               }
             }
         };
         h.postDelayed(stopPlaybackRun, 3000);
@@ -108,7 +115,11 @@ public class DetailAnimalActivity extends AppCompatActivity {
             btn2.setImageResource(R.drawable.animal_speaker);
         }
         txtAnimalName.setText(currentAnimal.getName());
-        imgAnimalDetail.setImageResource(currentAnimal.getImage());
+        Glide
+                .with(getApplicationContext())
+                .load(currentAnimal.getImageURL())
+                .into(imgAnimalDetail);
+//        imgAnimalDetail.setImageResource(currentAnimal.getImage());
         imgAnimalDetail.getLayoutParams().width = screenWidth;
         imgAnimalDetail.getLayoutParams().height = screenWidth;
     }
@@ -191,7 +202,10 @@ public class DetailAnimalActivity extends AppCompatActivity {
         txtAnimalName.setText(currentAnimal.getName());
         imgAnimalDetail.setImageResource(currentAnimal.getImage());
         if (currentAnimal.getHumanVoice() != 0) {
-            mediaBackground.setVolume(0.3f, 0.3f);
+            if(mediaBackground != null ){
+                mediaBackground.setVolume(0.3f, 0.3f);
+            }
+
             h.postDelayed(stopPlaybackRun, 3000);
             mediaPlayer = MediaPlayer.create(DetailAnimalActivity.this, currentAnimal.getHumanVoice());
             mediaPlayer.start();
@@ -216,7 +230,10 @@ public class DetailAnimalActivity extends AppCompatActivity {
         txtAnimalName.setText(currentAnimal.getName());
         imgAnimalDetail.setImageResource(currentAnimal.getImage());
         if (currentAnimal.getHumanVoice() != 0) {
-            mediaBackground.setVolume(0.3f, 0.3f);
+            if(mediaBackground != null ){
+                mediaBackground.setVolume(0.3f, 0.3f);
+            }
+
             h.postDelayed(stopPlaybackRun, 3000);
             mediaPlayer = MediaPlayer.create(DetailAnimalActivity.this, currentAnimal.getHumanVoice());
             mediaPlayer.start();
@@ -268,7 +285,10 @@ public class DetailAnimalActivity extends AppCompatActivity {
 //    }
     @Override
     protected void onPause() {
-        mediaBackground.pause();
+        if(mediaBackground != null){
+            mediaBackground.pause();
+        }
+
         super.onPause();
 
     }
@@ -277,19 +297,28 @@ public class DetailAnimalActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
 //        mediaBackground =  MediaPlayer.create(QuizActivity.this,R.raw.henes_bgmusic);
-        mediaBackground.start();
+        if(mediaBackground != null){
+            mediaBackground.start();
+        }
+
         super.onResume();
     }
 
     @Override
     protected void onDestroy() {
-        mediaBackground.release();
+        if(mediaBackground != null){
+            mediaBackground.release();
+        }
+
         super.onDestroy();
     }
 
     public void clickToHearAnimalName(View view) {
         if (currentAnimal.getHumanVoice() != 0) {
-            mediaBackground.setVolume(0.3f, 0.3f);
+            if(mediaBackground != null ){
+                mediaBackground.setVolume(0.3f, 0.3f);
+            }
+
             h.postDelayed(stopPlaybackRun, 3000);
             String url = "https://sv4.onlinevideoconverter.com/download?file=f5e4d3f5c2h7g6b1";
             MediaPlayer mediaPlayer = new MediaPlayer();

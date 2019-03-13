@@ -1,11 +1,14 @@
 package mobile.nhatcuong.animal;
 
 import android.content.Context;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+
+import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -94,7 +97,8 @@ public class ImageAdapter extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
         Animal image =  animals.get(position);
-        holder.image.setImageResource(image.getImage());
+//        holder.image.setImageURI(Uri.parse(image.getImageURL()));
+        Glide.with(context).load(image.getImageURL()).into( holder.image);
         holder.image.setBackgroundResource(R.drawable.bubble_background);
         holder.image.getLayoutParams().width = 100;
         holder.image.getLayoutParams().height = (intScreenWidth - 180)/2;

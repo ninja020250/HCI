@@ -15,6 +15,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Display;
 import android.view.View;
 import android.view.Window;
@@ -34,11 +35,14 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedInputStream;
@@ -294,28 +298,50 @@ public class MainActivity extends AppCompatActivity {
         return a;
     }
 
+    private ArrayList<Animal> getDataFromResponse(JSONArray data) {
+        ArrayList a = new ArrayList<Animal>();
+        try {
+                JSONObject jsonObject1 = data.getJSONObject(0);
+            JSONObject jsonObject2 = data.getJSONObject(1);
+                a.add(new Animal(jsonObject1.getString("Id"),jsonObject1.getString("Name"),R.raw.crab_voice,R.raw.turtle_sound, jsonObject1.getString("ImageUrl")));
+            a.add(new Animal(jsonObject2.getString("Id"),jsonObject2.getString("Name"),R.raw.clam_voice,R.raw.octopus_sound, jsonObject2.getString("ImageUrl")));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+//        for (int i = 0; i < data.length(); i++) {
+//            try {
+//                JSONObject jsonObject = data.getJSONObject(i);
+//                a.add(new Animal(jsonObject.getString("Id"),jsonObject.getString("Name"),R.raw.crab_voice,R.raw.crab_voice, jsonObject.getString("ImageUrl")));
+//            } catch (JSONException e) {
+//                e.printStackTrace();
+//            }
+//        }
+        return a;
+    }
     private void getData() {
         // get data from server
-        String url = "https://virtserver.swaggerhub.com/ninja020250/Apartment/2/user";
+        String url = "http://mobiledemo.azurewebsites.net/animal";
         RequestQueue requestQueue = Volley.newRequestQueue(this);
-        JsonObjectRequest objectRequest = new JsonObjectRequest(
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
                 Request.Method.GET, url, null,
-                new Response.Listener<JSONObject>() {
+                new Response.Listener<JSONArray>() {
                     @Override
-                    public void onResponse(JSONObject response) {
-                        animals = fakeData();
+                    public void onResponse(JSONArray response) {
+
+                        animals =  getDataFromResponse(response);
                         saveDataToPreference(animals);
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(MainActivity.this, "calling api fail", Toast.LENGTH_SHORT).show();
+                        System.out.println("error api:" + error);
+                        Toast.makeText(MainActivity.this, "calling api fail"+error, Toast.LENGTH_SHORT).show();
                     }
                 }
 
         );
-        requestQueue.add(objectRequest);
+        requestQueue.add(jsonArrayRequest);
     }
 
     @Override
