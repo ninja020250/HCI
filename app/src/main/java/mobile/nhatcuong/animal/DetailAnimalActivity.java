@@ -5,7 +5,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Point;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -24,6 +26,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -288,8 +291,19 @@ public class DetailAnimalActivity extends AppCompatActivity {
         if (currentAnimal.getHumanVoice() != 0) {
             mediaBackground.setVolume(0.3f, 0.3f);
             h.postDelayed(stopPlaybackRun, 3000);
-            mediaPlayer = MediaPlayer.create(DetailAnimalActivity.this, currentAnimal.getHumanVoice());
+            String url = "https://sv4.onlinevideoconverter.com/download?file=f5e4d3f5c2h7g6b1";
+            MediaPlayer mediaPlayer = new MediaPlayer();
+            mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+          try {
+              mediaPlayer.setDataSource(url);
+              mediaPlayer.prepare(); // might take long! (for buffering, etc)
+          }catch (Exception e){
+
+          }
             mediaPlayer.start();
+// Trigger an async preparation which will file listener when completed
+
+
         }
     }
 }

@@ -1,14 +1,18 @@
 package mobile.nhatcuong.animal;
 
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.drawable.ColorDrawable;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Handler;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Display;
@@ -37,10 +41,21 @@ import com.google.gson.Gson;
 
 import org.json.JSONObject;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import mobile.nhatcuong.animal.utils.ConnectivityHelper;
 import pl.droidsonroids.gif.GifImageView;
 
 
@@ -69,15 +84,16 @@ public class MainActivity extends AppCompatActivity {
     private Handler handler = new Handler();
     private GifImageView ray;
     private GifImageView whale;
-    private  GifImageView turtle;
+    private GifImageView turtle;
     private float ray_x;
     private float ray_y;
     private float whale_x;
     private float whale_y;
     private float turtle_x;
     private float turtle_y;
-//    ===================================================
+    //    ===================================================
     MediaPlayer mediaBackground;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -86,12 +102,51 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         mapping();
         eventMapping();
+        if (ConnectivityHelper.isConnectedToNetwork(getApplicationContext())) {
+
+            SharedPreferences sharedPreferences = getSharedPreferences("mobile.nhatcuong.database_preferences", MODE_PRIVATE);
+            if (sharedPreferences.getString("isDownload", "") == "" || sharedPreferences.getString("isDownload", "") == null) {
+                AlertDialog.Builder builder1 = new AlertDialog.Builder(MainActivity.this);
+                builder1.setMessage("Ứng dụng cần tải xuống 1 số con vật, bạn có đồng ý");
+                builder1.setCancelable(true);
+                builder1.setPositiveButton(
+                        "Đồng ý",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                Toast.makeText(MainActivity.this, "download success", Toast.LENGTH_SHORT).show();
+                                SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("mobile.nhatcuong.database_preferences", 0);
+                                SharedPreferences.Editor edt = sharedPreferences.edit();
+                                edt.putString("isDownload", "false");
+                                edt.apply();
+                                edt.commit();
+                                dialog.cancel();
+                            }
+                        });
+
+                builder1.setNegativeButton(
+                        "không",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                Toast.makeText(MainActivity.this, "ứng dụng sẽ sử dụng 1 số con vật có sẵn", Toast.LENGTH_SHORT).show();
+                                dialog.cancel();
+                            }
+                        });
+
+                AlertDialog alert11 = builder1.create();
+                alert11.show();
+            }
+
+
+        } else {
+            Toast.makeText(this, "không có mạng", Toast.LENGTH_SHORT).show();
+        }
         getData();
         playBackgroundMusic();
         setSeaAnimation();
     }
+
     private void mapping() {
-        btnSea =  findViewById(R.id.btnSea);
+        btnSea = findViewById(R.id.btnSea);
 
         bubble1 = findViewById(R.id.bubble);
         bubble2 = findViewById(R.id.bubble2);
@@ -103,6 +158,7 @@ public class MainActivity extends AppCompatActivity {
         actionbar_title = findViewById(R.id.actionbar_title);
         actionbar_title.setText("BÉ HỌC CON VẬT");
     }
+
     private void setSeaAnimation() {
         Animation zoom = AnimationUtils.loadAnimation(this, R.anim.zoom);
         bubble1.setAnimation(zoom);
@@ -122,7 +178,7 @@ public class MainActivity extends AppCompatActivity {
 //        bubble3.setX(-80.0f);
         bubble3.setY(200f);
 
-     //   whale.setX(-300f);
+        //   whale.setX(-300f);
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
@@ -138,6 +194,7 @@ public class MainActivity extends AppCompatActivity {
 
         // resizeButton();
     }
+
     private void changeFishPosition() {
         // change position of whale and ray.
         ray_x -= 10;
@@ -163,6 +220,7 @@ public class MainActivity extends AppCompatActivity {
         turtle.setX(turtle_x);
         turtle.setY(turtle_y);
     }
+
     public void changePostBubble() {
         bubble1_Y -= 10;
         if (bubble1.getY() + bubble1.getHeight() < 0) {
@@ -191,7 +249,7 @@ public class MainActivity extends AppCompatActivity {
     private void playBackgroundMusic() {
 //        music = new Intent(this, PlayMusicService.class);
 //        music.putExtra("music", R.raw.henes_bgmusic);
-        mediaBackground =  MediaPlayer.create(MainActivity.this,R.raw.henes_bgmusic);
+        mediaBackground = MediaPlayer.create(MainActivity.this, R.raw.henes_bgmusic);
         mediaBackground.start();
 //        startService(music);
     }
@@ -223,10 +281,10 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<Animal> fakeData() {
         //  get sample data
         ArrayList a = new ArrayList<Animal>();
-        a.add(new Animal("Con Cua", R.drawable.crab,0, R.raw.crab_voice));
+        a.add(new Animal("Con Cua", R.drawable.crab, 0, R.raw.crab_voice));
         a.add(new Animal("Cá Voi Xanh", R.drawable.blue_whale, 0, R.raw.whale_sound));
         a.add(new Animal("Ngọc Trai", R.drawable.clam, 0, R.raw.clam_voice));
-        a.add(new Animal("Cá Đuối", R.drawable.gray_fish,0, R.raw.stringray_sound));
+        a.add(new Animal("Cá Đuối", R.drawable.gray_fish, 0, R.raw.stringray_sound));
         a.add(new Animal("Con Sứa", R.drawable.jellyfish, 0, R.raw.jellyfish_sound));
         a.add(new Animal("Bạch Tuộc", R.drawable.octopus, 0, R.raw.octopus_sound));
         a.add(new Animal("Cá Ngựa", R.drawable.seahorse, 0, R.raw.horse_fish_sound));
@@ -266,6 +324,7 @@ public class MainActivity extends AppCompatActivity {
         super.onPause();
 
     }
+
     //
     @Override
     protected void onResume() {
@@ -279,8 +338,22 @@ public class MainActivity extends AppCompatActivity {
         mediaBackground.release();
         super.onDestroy();
     }
+
     public void clickToLearnAnimals(View view) {
         Intent intent = new Intent(MainActivity.this, AnimalsActivity.class);
         startActivity(intent);
+    }
+
+    public void clickToDownload(View view) {
+        try {
+            String url = "http://www.all-birds.com/Sound/western%20bluebird.wav"; // your URL here
+            MediaPlayer mediaPlayer = new MediaPlayer();
+            mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+            mediaPlayer.setDataSource(url);
+            mediaPlayer.prepare(); // might take long! (for buffering, etc)
+            mediaPlayer.start();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
