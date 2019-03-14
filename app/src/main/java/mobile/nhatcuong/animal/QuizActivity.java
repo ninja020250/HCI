@@ -20,6 +20,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -33,6 +34,7 @@ import java.util.TimerTask;
 import pl.droidsonroids.gif.GifImageView;
 
 public class QuizActivity extends AppCompatActivity {
+    private boolean isDownloaded = false;
     private ImageView bg;
     private int actionbarColor;
     private TextView actionbar_title;
@@ -68,6 +70,13 @@ public class QuizActivity extends AppCompatActivity {
         actionbar.setBackgroundResource(actionbarColor);
         //done setup
         mappingEvent();
+        SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("mobile.nhatcuong.database_preferences", 0);
+        String data = sharedPreferences.getString("downloaded", "");
+        if (data.equals("") || data.equals("false")) {
+            isDownloaded = false;
+        } else {
+            isDownloaded = true;
+        }
         setAnimated();
         playBackgroundMusic();
         mediaBackground.setVolume(0.0f, 0.0f);
@@ -136,9 +145,11 @@ public class QuizActivity extends AppCompatActivity {
 
         ArrayList<Animal> list = getRandomAnimal();
         quiz = new Quiz(list);
-        imgCurrentAnimal.setImageResource(list.get(0).getImage());
-
-
+        if(isDownloaded){
+            Glide.with(this).load(list.get(0).getImageURL()).into( imgCurrentAnimal);
+        }else{
+            imgCurrentAnimal.setImageResource(list.get(0).getImage());
+        }
         ArrayList<Animal> a = quiz.getAnwsers();
         btnAnswer1.setText(a.get(0).getName());
         btnAnswer2.setText(a.get(1).getName());

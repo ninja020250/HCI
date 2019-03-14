@@ -3,6 +3,7 @@ package mobile.nhatcuong.animal;
 import android.app.ActionBar;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.media.AudioManager;
@@ -28,6 +29,8 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Timer;
@@ -38,6 +41,7 @@ import pl.droidsonroids.gif.GifImageView;
 public class DetailAnimalActivity extends AppCompatActivity {
 
     //    =====================================activity element =====================================
+    private boolean isDownloaded = false;
     private TextView txtAnimalName;
     private GifImageView imgAnimalDetail;
     private boolean isMusicPlaying;
@@ -70,21 +74,28 @@ public class DetailAnimalActivity extends AppCompatActivity {
         setContentView(R.layout.activity_detail_animal);
         // ======================================
         mapping();
+        SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("mobile.nhatcuong.database_preferences", 0);
+        String data = sharedPreferences.getString("downloaded", "");
+        if (data.equals("") || data.equals("false")) {
+            isDownloaded = false;
+        } else {
+            isDownloaded = true;
+        }
         setAnimation();
 //        playBackgroundMusic();
 //        mediaBackground.stop();
         mediaBackground = MediaPlayer.create(DetailAnimalActivity.this, R.raw.henes_bgmusic);
         mediaBackground.start();
 
-        if(mediaBackground != null ){
+        if (mediaBackground != null) {
             mediaBackground.setVolume(0.0f, 0.0f);
         }
         h = new Handler();
         stopPlaybackRun = new Runnable() {
             public void run() {
-               if(mediaBackground != null ){
-                   mediaBackground.setVolume(1.0f, 1.0f);
-               }
+                if (mediaBackground != null) {
+                    mediaBackground.setVolume(1.0f, 1.0f);
+                }
             }
         };
         h.postDelayed(stopPlaybackRun, 3000);
@@ -107,19 +118,43 @@ public class DetailAnimalActivity extends AppCompatActivity {
         animals = (ArrayList<Animal>) bundle.getSerializable("ANIMALS");
         position = bundle.getInt("POSITION");
         currentAnimal = animals.get(position);
-        question_media = MediaPlayer.create(DetailAnimalActivity.this, currentAnimal.getHumanVoice());
-        question_media.start();
-        if (currentAnimal.getAnimalVoice() == 0) {
-            btn2.setImageResource(R.drawable.voice_disable);
+
+        if (isDownloaded == false) {
+            question_media = MediaPlayer.create(DetailAnimalActivity.this, currentAnimal.getHumanVoice());
+            question_media.start();
+            if (currentAnimal.getAnimalVoice() == 0) {
+                btn2.setImageResource(R.drawable.voice_disable);
+            } else {
+                btn2.setImageResource(R.drawable.animal_speaker);
+            }
         } else {
-            btn2.setImageResource(R.drawable.animal_speaker);
+            question_media = new MediaPlayer();
+            int i = 0;
+            try {
+                question_media.setDataSource(currentAnimal.getHumanVoiceURL());
+                question_media.prepare();
+                question_media.start();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            if (currentAnimal.getAnimalVoiceURL() == "") {
+                btn2.setImageResource(R.drawable.voice_disable);
+            } else {
+                btn2.setImageResource(R.drawable.animal_speaker);
+            }
         }
+
         txtAnimalName.setText(currentAnimal.getName());
-        Glide
-                .with(getApplicationContext())
-                .load(currentAnimal.getImageURL())
-                .into(imgAnimalDetail);
-//        imgAnimalDetail.setImageResource(currentAnimal.getImage());
+        if (isDownloaded) {
+            Glide
+                    .with(getApplicationContext())
+                    .load(currentAnimal.getImageURL())
+                    .into(imgAnimalDetail);
+        } else {
+            imgAnimalDetail.setImageResource(currentAnimal.getImage());
+        }
+
+//
         imgAnimalDetail.getLayoutParams().width = screenWidth;
         imgAnimalDetail.getLayoutParams().height = screenWidth;
     }
@@ -180,8 +215,8 @@ public class DetailAnimalActivity extends AppCompatActivity {
     public void playAnimalSound(View view) {
         if (currentAnimal.getAnimalVoice() != 0) {
 
-           mediaPlayer = MediaPlayer.create(DetailAnimalActivity.this, currentAnimal.getAnimalVoice());
-           mediaPlayer.start();
+            mediaPlayer = MediaPlayer.create(DetailAnimalActivity.this, currentAnimal.getAnimalVoice());
+            mediaPlayer.start();
         }
 
 
@@ -200,9 +235,15 @@ public class DetailAnimalActivity extends AppCompatActivity {
             btn2.setImageResource(R.drawable.animal_speaker);
         }
         txtAnimalName.setText(currentAnimal.getName());
-        imgAnimalDetail.setImageResource(currentAnimal.getImage());
+        if (isDownloaded) {
+            Glide.with(this).load(currentAnimal.getImageURL()).into(imgAnimalDetail);
+        } else {
+            imgAnimalDetail.setImageResource(currentAnimal.getImage());
+        }
+
+//
         if (currentAnimal.getHumanVoice() != 0) {
-            if(mediaBackground != null ){
+            if (mediaBackground != null) {
                 mediaBackground.setVolume(0.3f, 0.3f);
             }
 
@@ -228,9 +269,15 @@ public class DetailAnimalActivity extends AppCompatActivity {
             btn2.setImageResource(R.drawable.animal_speaker);
         }
         txtAnimalName.setText(currentAnimal.getName());
-        imgAnimalDetail.setImageResource(currentAnimal.getImage());
+        if (isDownloaded) {
+            Glide.with(this).load(currentAnimal.getImageURL()).into(imgAnimalDetail);
+        } else {
+            imgAnimalDetail.setImageResource(currentAnimal.getImage());
+        }
+
+
         if (currentAnimal.getHumanVoice() != 0) {
-            if(mediaBackground != null ){
+            if (mediaBackground != null) {
                 mediaBackground.setVolume(0.3f, 0.3f);
             }
 
@@ -285,7 +332,7 @@ public class DetailAnimalActivity extends AppCompatActivity {
 //    }
     @Override
     protected void onPause() {
-        if(mediaBackground != null){
+        if (mediaBackground != null) {
             mediaBackground.pause();
         }
 
@@ -297,7 +344,7 @@ public class DetailAnimalActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
 //        mediaBackground =  MediaPlayer.create(QuizActivity.this,R.raw.henes_bgmusic);
-        if(mediaBackground != null){
+        if (mediaBackground != null) {
             mediaBackground.start();
         }
 
@@ -306,7 +353,7 @@ public class DetailAnimalActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
-        if(mediaBackground != null){
+        if (mediaBackground != null) {
             mediaBackground.release();
         }
 
@@ -314,22 +361,26 @@ public class DetailAnimalActivity extends AppCompatActivity {
     }
 
     public void clickToHearAnimalName(View view) {
-        if (currentAnimal.getHumanVoice() != 0) {
-            if(mediaBackground != null ){
-                mediaBackground.setVolume(0.3f, 0.3f);
-            }
+        if (mediaBackground != null) {
+            mediaBackground.setVolume(0.3f, 0.3f);
+        }
 
-            h.postDelayed(stopPlaybackRun, 3000);
-            String url = "https://sv4.onlinevideoconverter.com/download?file=f5e4d3f5c2h7g6b1";
+        h.postDelayed(stopPlaybackRun, 3000);
+        if (isDownloaded == true) {
             MediaPlayer mediaPlayer = new MediaPlayer();
-            mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-          try {
-              mediaPlayer.setDataSource(url);
-              mediaPlayer.prepare(); // might take long! (for buffering, etc)
-          }catch (Exception e){
+            try {
+                mediaPlayer.setDataSource(currentAnimal.getHumanVoiceURL());
+                mediaPlayer.prepare();
+                mediaPlayer.start(); // might take long! (for buffering, etc)
+            } catch (Exception e) {
 
-          }
-            mediaPlayer.start();
+            }
+        } else {
+            if (currentAnimal.getHumanVoice() != 0) {
+
+                MediaPlayer mediaPlayer = MediaPlayer.create(this, currentAnimal.getAnimalVoice());
+                mediaPlayer.start();
+            }
 // Trigger an async preparation which will file listener when completed
 
 

@@ -109,4 +109,15 @@ public class Animal implements Serializable {
     public void setImageURL(String imageURL) {
         this.imageURL = imageURL;
     }
+
+    public String getNameHumanAudio(){
+        String[] fileName =  getHumanVoiceURL().split("/");
+        return fileName[fileName.length -1];
+
+    }
+    public String getNameAnimalAudio(){
+        String[] fileName =  getAnimalVoiceURL().split("/");
+        return fileName[fileName.length -1];
+
+    }
 }

@@ -104,7 +104,14 @@ public class AnimalsActivity extends AppCompatActivity {
         dp.getSize(size);
         int screenWidth = size.x;
         bg.setImageResource(R.drawable.sea_background);
-        adapter = new ImageAdapter(this, R.layout.row_animal, animals, screenWidth);
+        SharedPreferences sharedPreferences = getSharedPreferences("mobile.nhatcuong.database_preferences", MODE_PRIVATE);
+        String downloaded = sharedPreferences.getString("downloaded", "");
+        if(downloaded == "" || downloaded == "false"){
+            adapter = new ImageAdapter(this, R.layout.row_animal, animals, screenWidth, false);
+        }else{
+            adapter = new ImageAdapter(this, R.layout.row_animal, animals, screenWidth, true);
+        }
+
         gvAnimals.setAdapter(adapter);
         mappingEvent();
         setupActionBar();

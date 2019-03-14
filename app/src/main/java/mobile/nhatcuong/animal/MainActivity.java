@@ -107,9 +107,12 @@ public class MainActivity extends AppCompatActivity {
         mapping();
         eventMapping();
         if (ConnectivityHelper.isConnectedToNetwork(getApplicationContext())) {
-
-            SharedPreferences sharedPreferences = getSharedPreferences("mobile.nhatcuong.database_preferences", MODE_PRIVATE);
-            if (sharedPreferences.getString("isDownload", "") == "" || sharedPreferences.getString("isDownload", "") == null) {
+            SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("mobile.nhatcuong.database_preferences", 0);
+            String downloaded = sharedPreferences.getString("downloaded", "");
+            if (downloaded == ""
+                    || downloaded == "false"
+                    || downloaded == null
+                    ) {
                 AlertDialog.Builder builder1 = new AlertDialog.Builder(MainActivity.this);
                 builder1.setMessage("Ứng dụng cần tải xuống 1 số con vật, bạn có đồng ý");
                 builder1.setCancelable(true);
@@ -117,12 +120,7 @@ public class MainActivity extends AppCompatActivity {
                         "Đồng ý",
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
-                                Toast.makeText(MainActivity.this, "download success", Toast.LENGTH_SHORT).show();
-                                SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("mobile.nhatcuong.database_preferences", 0);
-                                SharedPreferences.Editor edt = sharedPreferences.edit();
-                                edt.putString("isDownload", "false");
-                                edt.apply();
-                                edt.commit();
+                                getDataOnline();
                                 dialog.cancel();
                             }
                         });
@@ -131,6 +129,7 @@ public class MainActivity extends AppCompatActivity {
                         "không",
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
+                                getDataOffline();
                                 Toast.makeText(MainActivity.this, "ứng dụng sẽ sử dụng 1 số con vật có sẵn", Toast.LENGTH_SHORT).show();
                                 dialog.cancel();
                             }
@@ -144,7 +143,7 @@ public class MainActivity extends AppCompatActivity {
         } else {
             Toast.makeText(this, "không có mạng", Toast.LENGTH_SHORT).show();
         }
-        getData();
+//        getData();
         playBackgroundMusic();
         setSeaAnimation();
     }
@@ -300,25 +299,24 @@ public class MainActivity extends AppCompatActivity {
 
     private ArrayList<Animal> getDataFromResponse(JSONArray data) {
         ArrayList a = new ArrayList<Animal>();
-        try {
-                JSONObject jsonObject1 = data.getJSONObject(0);
-            JSONObject jsonObject2 = data.getJSONObject(1);
-                a.add(new Animal(jsonObject1.getString("Id"),jsonObject1.getString("Name"),R.raw.crab_voice,R.raw.turtle_sound, jsonObject1.getString("ImageUrl")));
-            a.add(new Animal(jsonObject2.getString("Id"),jsonObject2.getString("Name"),R.raw.clam_voice,R.raw.octopus_sound, jsonObject2.getString("ImageUrl")));
+
+        for (int i = 0; i < data.length(); i++) {
+            try {
+                JSONObject jsonObject = data.getJSONObject(i);
+                a.add(new Animal(jsonObject.getString("Id"), jsonObject.getString("Name"), jsonObject.getString("AniamlAudioUrl"),jsonObject.getString("HumanAudioUrl") , jsonObject.getString("ImageUrl")));
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-//        for (int i = 0; i < data.length(); i++) {
-//            try {
-//                JSONObject jsonObject = data.getJSONObject(i);
-//                a.add(new Animal(jsonObject.getString("Id"),jsonObject.getString("Name"),R.raw.crab_voice,R.raw.crab_voice, jsonObject.getString("ImageUrl")));
-//            } catch (JSONException e) {
-//                e.printStackTrace();
-//            }
-//        }
+        }
         return a;
     }
-    private void getData() {
+
+    private void getDataOffline() {
+        animals = fakeData();
+        saveDataToPreference(animals);
+    }
+
+    private void getDataOnline() {
         // get data from server
         String url = "http://mobiledemo.azurewebsites.net/animal";
         RequestQueue requestQueue = Volley.newRequestQueue(this);
@@ -327,16 +325,23 @@ public class MainActivity extends AppCompatActivity {
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
-
-                        animals =  getDataFromResponse(response);
+                        animals = getDataFromResponse(response);
                         saveDataToPreference(animals);
+                        Intent intent = new Intent(MainActivity.this, DownloadActivity.class);
+                        startActivityForResult(intent, 001);
+                        SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("mobile.nhatcuong.database_preferences", 0);
+//                        SharedPreferences.Editor edt = sharedPreferences.edit();
+//                        edt.putString("dowloaded", "true");
+//                        edt.apply();
+//                        edt.commit();
+
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         System.out.println("error api:" + error);
-                        Toast.makeText(MainActivity.this, "calling api fail"+error, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MainActivity.this, "calling api fail" + error, Toast.LENGTH_SHORT).show();
                     }
                 }
 
@@ -370,16 +375,5 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public void clickToDownload(View view) {
-        try {
-            String url = "http://www.all-birds.com/Sound/western%20bluebird.wav"; // your URL here
-            MediaPlayer mediaPlayer = new MediaPlayer();
-            mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-            mediaPlayer.setDataSource(url);
-            mediaPlayer.prepare(); // might take long! (for buffering, etc)
-            mediaPlayer.start();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+
 }

@@ -21,7 +21,8 @@ public class ImageAdapter extends BaseAdapter {
     private int layout;
     private List<Animal> animals ;
     private int intScreenWidth ;
-    public ImageAdapter(Context context, int layout, List<Animal> animals, int intScreenWidth) {
+    private boolean isOnline;
+    public ImageAdapter(Context context, int layout, List<Animal> animals, int intScreenWidth, boolean isOnline) {
         this.context = context;
         this.layout = layout;
         if(animals == null){
@@ -29,7 +30,7 @@ public class ImageAdapter extends BaseAdapter {
         }else{
             this.animals = animals;
         }
-
+        this.isOnline = isOnline;
         this.intScreenWidth =  intScreenWidth;
     }
 
@@ -55,6 +56,14 @@ public class ImageAdapter extends BaseAdapter {
 
     public void setAnimals(List<Animal> animals) {
         this.animals = animals;
+    }
+
+    public boolean isOnline() {
+        return isOnline;
+    }
+
+    public void setOnline(boolean online) {
+        isOnline = online;
     }
 
     @Override
@@ -97,8 +106,11 @@ public class ImageAdapter extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
         Animal image =  animals.get(position);
-//        holder.image.setImageURI(Uri.parse(image.getImageURL()));
-        Glide.with(context).load(image.getImageURL()).into( holder.image);
+        if (isOnline){
+            Glide.with(context).load(image.getImageURL()).into( holder.image);
+        }else{
+                    holder.image.setImageResource(image.getImage());
+        }
         holder.image.setBackgroundResource(R.drawable.bubble_background);
         holder.image.getLayoutParams().width = 100;
         holder.image.getLayoutParams().height = (intScreenWidth - 180)/2;
