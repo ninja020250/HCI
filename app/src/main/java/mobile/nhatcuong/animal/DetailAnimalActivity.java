@@ -87,18 +87,18 @@ public class DetailAnimalActivity extends AppCompatActivity {
         mediaBackground = MediaPlayer.create(DetailAnimalActivity.this, R.raw.henes_bgmusic);
         mediaBackground.start();
 
-        if (mediaBackground != null) {
-            mediaBackground.setVolume(0.0f, 0.0f);
-        }
-        h = new Handler();
-        stopPlaybackRun = new Runnable() {
-            public void run() {
-                if (mediaBackground != null) {
-                    mediaBackground.setVolume(1.0f, 1.0f);
-                }
-            }
-        };
-        h.postDelayed(stopPlaybackRun, 3000);
+       // if (mediaBackground != null) {
+         //   mediaBackground.setVolume(0.0f, 0.0f);
+      //  }
+       // h = new Handler();
+//        stopPlaybackRun = new Runnable() {
+//            public void run() {
+//                if (mediaBackground != null) {
+//                    mediaBackground.setVolume(1.0f, 1.0f);
+//                }
+//            }
+//        };
+//        h.postDelayed(stopPlaybackRun, 3000);
         setupCurrentAnimal();
         setupActionbar();
         eventMapping();
@@ -243,11 +243,11 @@ public class DetailAnimalActivity extends AppCompatActivity {
 
 //
         if (currentAnimal.getHumanVoice() != 0) {
-            if (mediaBackground != null) {
-                mediaBackground.setVolume(0.3f, 0.3f);
-            }
+//            if (mediaBackground != null) {
+//                mediaBackground.setVolume(0.3f, 0.3f);
+//            }
 
-            h.postDelayed(stopPlaybackRun, 3000);
+          //  h.postDelayed(stopPlaybackRun, 3000);
             mediaPlayer = MediaPlayer.create(DetailAnimalActivity.this, currentAnimal.getHumanVoice());
             mediaPlayer.start();
         }
@@ -277,11 +277,11 @@ public class DetailAnimalActivity extends AppCompatActivity {
 
 
         if (currentAnimal.getHumanVoice() != 0) {
-            if (mediaBackground != null) {
-                mediaBackground.setVolume(0.3f, 0.3f);
-            }
-
-            h.postDelayed(stopPlaybackRun, 3000);
+//            if (mediaBackground != null) {
+//                mediaBackground.setVolume(0.3f, 0.3f);
+//            }
+//
+//            h.postDelayed(stopPlaybackRun, 3000);
             mediaPlayer = MediaPlayer.create(DetailAnimalActivity.this, currentAnimal.getHumanVoice());
             mediaPlayer.start();
         }
@@ -361,11 +361,11 @@ public class DetailAnimalActivity extends AppCompatActivity {
     }
 
     public void clickToHearAnimalName(View view) {
-        if (mediaBackground != null) {
-            mediaBackground.setVolume(0.3f, 0.3f);
-        }
+//        if (mediaBackground != null) {
+//            mediaBackground.setVolume(0.3f, 0.3f);
+//        }
 
-        h.postDelayed(stopPlaybackRun, 3000);
+    //    h.postDelayed(stopPlaybackRun, 3000);
         if (isDownloaded == true) {
             MediaPlayer mediaPlayer = new MediaPlayer();
             try {
@@ -382,8 +382,6 @@ public class DetailAnimalActivity extends AppCompatActivity {
                 mediaPlayer.start();
             }
 // Trigger an async preparation which will file listener when completed
-
-
         }
     }
 }

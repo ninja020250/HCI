@@ -292,8 +292,8 @@ public class MainActivity extends AppCompatActivity {
         a.add(new Animal("Bạch Tuộc", R.drawable.octopus, 0, R.raw.octopus_sound));
         a.add(new Animal("Cá Ngựa", R.drawable.seahorse, 0, R.raw.horse_fish_sound));
         a.add(new Animal("Cá Heo", R.drawable.dolphin, R.raw.dolphin, R.raw.dolphin_sound));
-        a.add(new Animal("Cá Mập", R.drawable.shark, 0, R.raw.shark_sound));
-        a.add(new Animal("Con Rùa", R.drawable.turtle, 0, R.raw.turtle_sound));
+//        a.add(new Animal("Cá Mập", R.drawable.shark, 0, R.raw.shark_sound));
+//        a.add(new Animal("Con Rùa", R.drawable.turtle, 0, R.raw.turtle_sound));
         return a;
     }
 
@@ -340,8 +340,9 @@ public class MainActivity extends AppCompatActivity {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        System.out.println("error api:" + error);
-                        Toast.makeText(MainActivity.this, "calling api fail" + error, Toast.LENGTH_SHORT).show();
+                        getDataOffline();
+                        Toast.makeText(MainActivity.this, "mạng lỗi hoặc quá yếu, ứng dụng sử dụng 1 số con vật có sẵn", Toast.LENGTH_SHORT).show();
+
                     }
                 }
 

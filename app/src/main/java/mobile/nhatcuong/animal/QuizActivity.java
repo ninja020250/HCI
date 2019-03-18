@@ -79,14 +79,14 @@ public class QuizActivity extends AppCompatActivity {
         }
         setAnimated();
         playBackgroundMusic();
-        mediaBackground.setVolume(0.0f, 0.0f);
-        h = new Handler();
-        stopPlaybackRun = new Runnable() {
-            public void run() {
-                mediaBackground.setVolume(1.0f, 1.0f);
-            }
-        };
-        h.postDelayed(stopPlaybackRun, 2500);
+//        mediaBackground.setVolume(0.0f, 0.0f);
+//        h = new Handler();
+//        stopPlaybackRun = new Runnable() {
+//            public void run() {
+//                mediaBackground.setVolume(1.0f, 1.0f);
+//            }
+//        };
+     //   h.postDelayed(stopPlaybackRun, 2500);
         getDataFromDatabase();
         setupGame();
         HandleClickAnswer();
@@ -179,8 +179,8 @@ public class QuizActivity extends AppCompatActivity {
                     public void run() {
                         gifSuccess.setVisibility(View.INVISIBLE);
                         mediaPlayer.stop();
-                        mediaBackground.setVolume(0.0f, 0.0f);
-                        h.postDelayed(stopPlaybackRun, 2500);
+                      //  mediaBackground.setVolume(0.0f, 0.0f);
+                       // h.postDelayed(stopPlaybackRun, 2500);
                         question_media = MediaPlayer.create(QuizActivity.this, R.raw.question);
                         question_media.start();
                     }
