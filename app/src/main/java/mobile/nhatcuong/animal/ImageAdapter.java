@@ -100,7 +100,7 @@ public class ImageAdapter extends BaseAdapter {
             holder = new ViewHolder();
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = inflater.inflate(layout, null);
-            holder.image = convertView.findViewById(R.id.imgViewAnimal);
+                holder.image = convertView.findViewById(R.id.imgViewAnimal);
             convertView.setTag(holder);
         }else{
             holder = (ViewHolder) convertView.getTag();

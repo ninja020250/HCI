@@ -1,5 +1,7 @@
 package mobile.nhatcuong.animal;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
@@ -165,12 +167,9 @@ public class DownloadActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String unused) {
             saveDataToPreference(animals);
-            SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("mobile.nhatcuong.database_preferences", 0);
-            SharedPreferences.Editor edt = sharedPreferences.edit();
-            edt.putString("downloaded", "true");
-            edt.apply();
-            edt.commit();
-            Toast.makeText(DownloadActivity.this, "All downloaded", Toast.LENGTH_SHORT).show();
+            Intent returnIntent = new Intent();
+            setResult(Activity.RESULT_OK, returnIntent);
+//            Toast.makeText(DownloadActivity.this, "All downloaded", Toast.LENGTH_SHORT).show();
             setResult(RESULT_OK);
             finish();
             //   dismissDialog(DIALOG_DOWNLOAD_PROGRESS);
@@ -203,6 +202,10 @@ public class DownloadActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    }
 }
 
 

@@ -1,5 +1,6 @@
 package mobile.nhatcuong.animal;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -11,6 +12,7 @@ import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Handler;
+import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -65,6 +67,8 @@ import pl.droidsonroids.gif.GifImageView;
 
 public class MainActivity extends AppCompatActivity {
     private static final int RQ_CODE = 111; // request code
+    private static final int RQ_DOWNLOAD = 001;
+    AlertDialog.Builder builder1=null;
     // =====================================actionbar custome =====================================
     private ImageView backbutton;
     TextView actionbar_title;
@@ -113,7 +117,7 @@ public class MainActivity extends AppCompatActivity {
                     || downloaded == "false"
                     || downloaded == null
                     ) {
-                AlertDialog.Builder builder1 = new AlertDialog.Builder(MainActivity.this);
+                builder1 = new AlertDialog.Builder(MainActivity.this);
                 builder1.setMessage("Ứng dụng cần tải xuống 1 số con vật, bạn có đồng ý");
                 builder1.setCancelable(true);
                 builder1.setPositiveButton(
@@ -135,6 +139,14 @@ public class MainActivity extends AppCompatActivity {
                             }
                         });
 
+                builder1.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                    @Override
+                    public void onCancel(DialogInterface dialog) {
+                        getDataOffline();
+//                        Toast.makeText(MainActivity.this, "ứng dụng sẽ sử dụng 1 số con vật có sẵn", Toast.LENGTH_SHORT).show();
+                        dialog.cancel();
+                    }
+                });
                 AlertDialog alert11 = builder1.create();
                 alert11.show();
             }
@@ -150,7 +162,6 @@ public class MainActivity extends AppCompatActivity {
 
     private void mapping() {
         btnSea = findViewById(R.id.btnSea);
-
         bubble1 = findViewById(R.id.bubble);
         bubble2 = findViewById(R.id.bubble2);
         bubble3 = findViewById(R.id.bubble3);
@@ -303,7 +314,7 @@ public class MainActivity extends AppCompatActivity {
         for (int i = 0; i < data.length(); i++) {
             try {
                 JSONObject jsonObject = data.getJSONObject(i);
-                a.add(new Animal(jsonObject.getString("Id"), jsonObject.getString("Name"), jsonObject.getString("AniamlAudioUrl"),jsonObject.getString("HumanAudioUrl") , jsonObject.getString("ImageUrl")));
+                a.add(new Animal(jsonObject.getString("Id"), jsonObject.getString("Name"), jsonObject.getString("AniamlAudioUrl"), jsonObject.getString("HumanAudioUrl"), jsonObject.getString("ImageUrl")));
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -318,6 +329,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void getDataOnline() {
         // get data from server
+        btnSea.setEnabled(false);
         String url = "http://mobiledemo.azurewebsites.net/animal";
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
@@ -328,12 +340,9 @@ public class MainActivity extends AppCompatActivity {
                         animals = getDataFromResponse(response);
                         saveDataToPreference(animals);
                         Intent intent = new Intent(MainActivity.this, DownloadActivity.class);
-                        startActivityForResult(intent, 001);
+                        btnSea.setEnabled(true);
+                        startActivityForResult(intent, RQ_DOWNLOAD);
                         SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("mobile.nhatcuong.database_preferences", 0);
-//                        SharedPreferences.Editor edt = sharedPreferences.edit();
-//                        edt.putString("dowloaded", "true");
-//                        edt.apply();
-//                        edt.commit();
 
                     }
                 },
@@ -342,7 +351,7 @@ public class MainActivity extends AppCompatActivity {
                     public void onErrorResponse(VolleyError error) {
                         getDataOffline();
                         Toast.makeText(MainActivity.this, "mạng lỗi hoặc quá yếu, ứng dụng sử dụng 1 số con vật có sẵn", Toast.LENGTH_SHORT).show();
-
+                        btnSea.setEnabled(true);
                     }
                 }
 
@@ -360,6 +369,16 @@ public class MainActivity extends AppCompatActivity {
     //
     @Override
     protected void onResume() {
+        SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("mobile.nhatcuong.database_preferences", 0);
+        String downloaded = sharedPreferences.getString("downloaded", "");
+        if (downloaded == ""
+                || downloaded == "false"
+                || downloaded == null
+                ){
+            AlertDialog alert11 = builder1.create();
+            alert11.show();
+        }
+
 //        mediaBackground =  MediaPlayer.create(QuizActivity.this,R.raw.henes_bgmusic);
         mediaBackground.start();
         super.onResume();
@@ -376,5 +395,22 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        if (requestCode == RQ_DOWNLOAD) {
+            if (resultCode == Activity.RESULT_OK) {
 
+                SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("mobile.nhatcuong.database_preferences", 0);
+                SharedPreferences.Editor edt = sharedPreferences.edit();
+                edt.putString("downloaded", "true");
+                edt.apply();
+                edt.commit();
+                Toast.makeText(this, "Download success", Toast.LENGTH_SHORT).show();
+            } else {
+                getDataOffline();
+                Toast.makeText(this, "Download failed, App will use available data", Toast.LENGTH_SHORT).show();
+
+            }
+        }
+    }
 }
