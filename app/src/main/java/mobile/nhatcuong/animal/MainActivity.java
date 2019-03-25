@@ -405,7 +405,7 @@ public class MainActivity extends AppCompatActivity {
                 edt.putString("downloaded", "true");
                 edt.apply();
                 edt.commit();
-                Toast.makeText(this, "Download success", Toast.LENGTH_SHORT).show();
+
             } else {
                 getDataOffline();
                 Toast.makeText(this, "Download failed, App will use available data", Toast.LENGTH_SHORT).show();

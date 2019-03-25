@@ -74,6 +74,7 @@ public class DownloadActivity extends AppCompatActivity {
     private void saveDataToPreference(ArrayList<Animal> animals) {
 //        set new url internal
         for (int i = 0; i < animals.size(); i++) {
+
             if (!animals.get(i).getAnimalVoiceURL().equals("")) {
                 animals.get(i).setAnimalVoiceURL(getApplicationContext().getFilesDir().getPath()+"/mp3/"+ animals.get(i).getNameAnimalAudio());
             }

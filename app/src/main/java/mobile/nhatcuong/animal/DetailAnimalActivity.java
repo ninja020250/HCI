@@ -87,10 +87,10 @@ public class DetailAnimalActivity extends AppCompatActivity {
         mediaBackground = MediaPlayer.create(DetailAnimalActivity.this, R.raw.henes_bgmusic);
         mediaBackground.start();
 
-       // if (mediaBackground != null) {
-         //   mediaBackground.setVolume(0.0f, 0.0f);
-      //  }
-       // h = new Handler();
+        // if (mediaBackground != null) {
+        //   mediaBackground.setVolume(0.0f, 0.0f);
+        //  }
+        // h = new Handler();
 //        stopPlaybackRun = new Runnable() {
 //            public void run() {
 //                if (mediaBackground != null) {
@@ -214,9 +214,18 @@ public class DetailAnimalActivity extends AppCompatActivity {
 
     public void playAnimalSound(View view) {
         if (currentAnimal.getAnimalVoice() != 0) {
-
             mediaPlayer = MediaPlayer.create(DetailAnimalActivity.this, currentAnimal.getAnimalVoice());
             mediaPlayer.start();
+        }
+        if (!currentAnimal.getAnimalVoiceURL().equals("")) {
+            MediaPlayer mediaPlayer = new MediaPlayer();
+            try {
+                mediaPlayer.setDataSource(currentAnimal.getAnimalVoiceURL());
+                mediaPlayer.prepare();
+                mediaPlayer.start(); // might take long! (for buffering, etc)
+            } catch (Exception e) {
+
+            }
         }
 
 
@@ -247,7 +256,7 @@ public class DetailAnimalActivity extends AppCompatActivity {
 //                mediaBackground.setVolume(0.3f, 0.3f);
 //            }
 
-          //  h.postDelayed(stopPlaybackRun, 3000);
+            //  h.postDelayed(stopPlaybackRun, 3000);
             mediaPlayer = MediaPlayer.create(DetailAnimalActivity.this, currentAnimal.getHumanVoice());
             mediaPlayer.start();
         }
@@ -365,7 +374,7 @@ public class DetailAnimalActivity extends AppCompatActivity {
 //            mediaBackground.setVolume(0.3f, 0.3f);
 //        }
 
-    //    h.postDelayed(stopPlaybackRun, 3000);
+        //    h.postDelayed(stopPlaybackRun, 3000);
         if (isDownloaded == true) {
             MediaPlayer mediaPlayer = new MediaPlayer();
             try {

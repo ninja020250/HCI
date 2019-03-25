@@ -182,7 +182,6 @@ public class AnimalsActivity extends AppCompatActivity {
     }
 
 
-
     private void getDataFromDatabase() {
         SharedPreferences sharedPreferences = getSharedPreferences("mobile.nhatcuong.database_preferences", MODE_PRIVATE);
         String data = sharedPreferences.getString("animals", "");
